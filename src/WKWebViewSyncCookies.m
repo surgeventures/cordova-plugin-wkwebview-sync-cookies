@@ -5,13 +5,18 @@
 
 - (void)sync:(CDVInvokedUrlCommand *)command {
   @try {
-    NSString *urlHttpMethod = command.arguments[0];
-    NSString *urlString = command.arguments[1];
+    NSString *urlString = command.arguments[0];
+		NSString *body = command.arguments[1];
+
+		NSString *post = [NSString stringWithFormat:body];
+		NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding];
+		
     NSURL *url = [NSURL URLWithString:urlString];
 
     NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url];
-    [urlRequest setHTTPMethod:urlHttpMethod];
-    [urlRequest setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [urlRequest setHTTPMethod:@"POST"];
+		[urlRequest setHTTPBody:postData];
+    [urlRequest setValue:@"application/vnd.api+json" forHTTPHeaderField:@"Content-Type"];
 
     NSURLSession *urlSession = [NSURLSession sharedSession];
 
